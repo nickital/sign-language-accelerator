@@ -1,0 +1,57 @@
+#ifndef _LINEAR_H_
+#define _LINEAR_H_
+
+
+#include <k5_libs.h>
+#include <slr_lib.h>
+#include "slrx.h" 
+
+//------------------------------------------------------------------------------------------------------------
+
+// Linear Layer element
+
+uint8_t lin_elem(uint8_t* lin_arr_in,   // linear Input Image (single row)
+              int         lin_in_dim,   // linear Input dimensions           
+              int8_t*     linear_w_trn, // linear Weights Transposed, can be negative (2D matrix)
+              int32_t*    linear_b,     // linear Bias, can be negative (single row)
+              int         lin_out_idx); // output vector element index
+
+
+//------------------------------------------------------------------------------------------------------------
+
+ // Linear Layer 
+
+void linear(uint8_t* lin_arr_out,  // linear output feature-map (single row)
+            uint8_t* lin_arr_in,   // linear Input Image (single row)
+            int      lin_in_dim,   // linear Input dimensions
+            int      lin_out_dim,  // linear Input dimensions              
+            int8_t*  linear_w_trn, // linear Weights Transposed, can be negative (2D matrix)
+            int32_t* linear_b);    // linear Bias, can be negative (single row)
+
+// Fused linear0 + linear1 (LIN_HEAD_SETUP / LIN_HEAD_CALC; stage 2 adds HW argmax)
+void lin_head_setup(uint8_t* lin_arr_in,
+                    int      lin_in_dim,
+                    int      num_labels,
+                    int8_t*  lin0_w_trn,
+                    int32_t* lin0_b,
+                    int8_t*  lin1_w_trn,
+                    int32_t* lin1_b,
+                    uint8_t* result_addr);
+
+void lin_head_xlr(void);
+
+int lin_head_read_idx(uint8_t* result_addr);
+
+void lin_head(uint8_t* lin_arr_in,
+              int      lin_in_dim,
+              int      num_labels,
+              int8_t*  lin0_w_trn,
+              int32_t* lin0_b,
+              int8_t*  lin1_w_trn,
+              int32_t* lin1_b,
+              uint8_t* result_addr);
+
+
+//------------------------------------------------------------------------------------------------------------
+
+#endif
